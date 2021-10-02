@@ -1,0 +1,473 @@
+<script type="text/javascript">
+    RED.nodes.registerType('aladin',{
+        category: 'SASM Ecommerce Extensions Pack',
+        color: '#33AFE9',
+        defaults: {
+            // 기본값 지정 필요 변수: Output, Version
+            name: {value:""},
+            creds: {
+                value:"",
+                // required: true,
+                type: "aladinTTBKey"
+            },
+            RequestType: {value:""},
+            // params: {value:""},
+            Query: {value:""},
+            QueryType1: {value:""},
+            QueryType2: {value:""},
+            SearchTarget: {value:"Book"},
+            SubSearchTarget: {value:""},
+            ItemId: {value:""},
+            ItemIdType: {value:"ISBN"},
+            Start: {value:""},
+            MaxResults: {value:""},
+            Sort: {value:"Accuracy"},
+            Cover: {value:"Mid"},
+            CategoryId: {value:""},
+            Output: {value:"JS"},
+            Partner: {value:""},
+            includeKey: {value:""},
+            InputEncoding: {value:""},
+            Version: {value:"20131101"},
+            outofStockfilter: {value:""},
+            offCode: {value:""},
+            OptResult: {value:""},
+
+        },
+        inputs:1,
+        outputs:1,
+        icon: "Aladin.png",
+        label: function() {
+            return this.name||"aladin";
+        },
+        // align: 'center',
+        oneditprepare: function () {
+            $("#node-input-RequestType").change(function () {
+                const type = $("#node-input-RequestType option:selected").val();
+                if (type === "ItemSearch") {
+                    $("#form-row-Query").show()
+                    $("#form-row-QueryType1").show()
+                    $("#form-row-SearchTarget").show()
+                    $("#form-row-Start").show()
+                    $("#form-row-MaxResults").show()
+                    $("#form-row-Sort").show()
+                    $("#form-row-Cover").show()
+                    $("#form-row-CategoryId").show()
+                    $("#form-row-Output").show()
+                    $("#form-row-Partner").show()
+                    $("#form-row-includeKey").show()
+                    $("#form-row-InputEncoding").show()
+                    $("#form-row-Version").show()
+                    $("#form-row-outofStockfilter").show()
+                    $("#form-row-OptResult").show()
+
+                    // $("#form-row-Query").hide()
+                    // $("#form-row-QueryType1").hide()
+                    $("#form-row-QueryType2").hide()
+                    // $("#form-row-SearchTarget").hide()
+                    $("#form-row-SubSearchTarget").hide()
+                    $("#form-row-ItemId").hide()
+                    $("#form-row-ItemIdType").hide()
+                    // $("#form-row-Start").hide()
+                    // $("#form-row-MaxResults").hide()
+                    // $("#form-row-Sort").hide()
+                    // $("#form-row-Cover").hide()
+                    // $("#form-row-CategoryId").hide()
+                    // $("#form-row-Output").hide()
+                    // $("#form-row-Partner").hide()
+                    // $("#form-row-includeKey").hide()
+                    // $("#form-row-InputEncoding").hide()
+                    // $("#form-row-Version").hide()
+                    // $("#form-row-outofStockfilter").hide()
+                    $("#form-row-offCode").hide()
+                    // $("#form-row-OptResult").hide()
+
+                } else if (type === "ItemList") {
+                    $("#form-row-QueryType2").show()
+                    $("#form-row-SearchTarget").show()
+                    $("#form-row-SubSearchTarget").show()
+                    $("#form-row-Start").show()
+                    $("#form-row-MaxResults").show()
+                    $("#form-row-Cover").show()
+                    $("#form-row-CategoryId").show()
+                    $("#form-row-Output").show()
+                    $("#form-row-Partner").show()
+                    $("#form-row-includeKey").show()
+                    $("#form-row-InputEncoding").show()
+                    $("#form-row-Version").show()
+                    $("#form-row-outofStockfilter").show()
+                    $("#form-row-OptResult").show()
+
+                    $("#form-row-Query").hide()
+                    $("#form-row-QueryType1").hide()
+                    // $("#form-row-QueryType2").hide()
+                    // $("#form-row-SearchTarget").hide()
+                    // $("#form-row-SubSearchTarget").hide()
+                    $("#form-row-ItemId").hide()
+                    $("#form-row-ItemIdType").hide()
+                    // $("#form-row-Start").hide()
+                    // $("#form-row-MaxResults").hide()
+                    $("#form-row-Sort").hide()
+                    // $("#form-row-Cover").hide()
+                    // $("#form-row-CategoryId").hide()
+                    // $("#form-row-Output").hide()
+                    // $("#form-row-Partner").hide()
+                    // $("#form-row-includeKey").hide()
+                    // $("#form-row-InputEncoding").hide()
+                    // $("#form-row-Version").hide()
+                    // $("#form-row-outofStockfilter").hide()
+                    $("#form-row-offCode").hide()
+                    // $("#form-row-OptResult").hide()
+
+                } else if (type === "ItemLookUp") {
+                    $("#form-row-ItemId").show()
+                    $("#form-row-ItemIdType").show()
+                    $("#form-row-Cover").show()
+                    $("#form-row-Output").show()
+                    $("#form-row-Partner").show()
+                    $("#form-row-Version").show()
+                    $("#form-row-includeKey").show()
+                    $("#form-row-offCode").show()
+                    $("#form-row-OptResult").show()
+
+                    $("#form-row-Query").hide()
+                    $("#form-row-QueryType1").hide()
+                    $("#form-row-QueryType2").hide()
+                    $("#form-row-SearchTarget").hide()
+                    $("#form-row-SubSearchTarget").hide()
+                    // $("#form-row-ItemId").hide()
+                    // $("#form-row-ItemIdType").hide()
+                    $("#form-row-Start").hide()
+                    $("#form-row-MaxResults").hide()
+                    $("#form-row-Sort").hide()
+                    // $("#form-row-Cover").hide()
+                    $("#form-row-CategoryId").hide()
+                    // $("#form-row-Output").hide()
+                    // $("#form-row-Partner").hide()
+                    // $("#form-row-includeKey").hide()
+                    $("#form-row-InputEncoding").hide()
+                    // $("#form-row-Version").hide()
+                    $("#form-row-outofStockfilter").hide()
+                    // $("#form-row-offCode").hide()
+                    // $("#form-row-OptResult").hide()
+
+                } else if (type === "ItemOffStoreList") {
+                    $("#form-row-ItemId").show()
+                    $("#form-row-ItemIdType").show()
+
+                    $("#form-row-Query").hide()
+                    $("#form-row-QueryType1").hide()
+                    $("#form-row-QueryType2").hide()
+                    $("#form-row-SearchTarget").hide()
+                    $("#form-row-SubSearchTarget").hide()
+                    // $("#form-row-ItemId").hide()
+                    // $("#form-row-ItemIdType").hide()
+                    $("#form-row-Start").hide()
+                    $("#form-row-MaxResults").hide()
+                    $("#form-row-Sort").hide()
+                    $("#form-row-Cover").hide()
+                    $("#form-row-CategoryId").hide()
+                    $("#form-row-Output").hide()
+                    $("#form-row-Partner").hide()
+                    $("#form-row-includeKey").hide()
+                    $("#form-row-InputEncoding").hide()
+                    $("#form-row-Version").hide()
+                    $("#form-row-outofStockfilter").hide()
+                    $("#form-row-offCode").hide()
+                    $("#form-row-OptResult").hide()
+
+                } else {
+                    $("#form-row-Query").hide()
+                    $("#form-row-QueryType1").hide()
+                    $("#form-row-QueryType2").hide()
+                    $("#form-row-SearchTarget").hide()
+                    $("#form-row-SubSearchTarget").hide()
+                    $("#form-row-ItemId").hide()
+                    $("#form-row-ItemIdType").hide()
+                    $("#form-row-Start").hide()
+                    $("#form-row-MaxResults").hide()
+                    $("#form-row-Sort").hide()
+                    $("#form-row-Cover").hide()
+                    $("#form-row-CategoryId").hide()
+                    $("#form-row-Output").hide()
+                    $("#form-row-Partner").hide()
+                    $("#form-row-includeKey").hide()
+                    $("#form-row-InputEncoding").hide()
+                    $("#form-row-Version").hide()
+                    $("#form-row-outofStockfilter").hide()
+                    $("#form-row-offCode").hide()
+                    $("#form-row-OptResult").hide()
+                }
+            });
+            $("#node-input-RequestType").change();
+        },
+    });
+
+</script>
+
+<!-- 노드 변수 입력 시작 -->
+<script type="text/html" data-template-name="aladin">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-tips"><b>팁:</b> TTBKey는 <a href="https://www.aladin.co.kr/ttb">알라딘</a>에서 제공하는 API Key의 명칭으로 신청 후 획득할 수 있습니다.</div>
+    <div class="form-row">
+        <label for="node-input-creds"><i class="fa fa-key"></i> Creds</label>
+        <input type="text" id="node-input-creds" placeholder="Creds">
+    </div>
+    <div class="form-row">
+        <label for="node-input-RequestType"><i class="fa fa-list"></i> Request Type</label>
+        <select
+            type="text"
+            id="node-input-RequestType"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="ItemSearch">ItemSearch(상품검색)</option>
+            <option value="ItemList">ItemList(상품리스트)</option>
+            <option value="ItemLookUp">ItemLookUp(상품조회)</option>
+            <option value="ItemOffStoreList">ItemOffStoreList(중고상품 보유 매장 검색)</option>
+        </select>
+    </div>
+    <div class="form-row" id="form-row-Query">
+        <label for="node-input-Query"> Query </label>
+        <input type="text" id="node-input-Query" placeholder="검색어"/>
+    </div>
+    <!-- 상품 검색용 Query Type -->
+    <div class="form-row" id="form-row-QueryType1">
+        <label for="node-input-QueryType1"> QueryType1 </label>
+        <select
+            type="text"
+            id="node-input-QueryType1"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="Keyword">Keyword(제목+저자)</option>
+            <option value="Title">Title(제목검색)</option>
+            <option value="Author">Author(저자검색)</option>
+            <option value="Publisher">Publisher(출판사검색)</option>
+        </select>
+        <!-- <input type="text" id="node-input-QueryType1" /> -->
+    </div>
+    <!-- 상품 리스트용 Query Type -->
+    <div class="form-row" id="form-row-QueryType2">
+        <label for="node-input-QueryType2"> QueryType2 </label>
+        <select
+            type="text"
+            id="node-input-QueryType2"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="ItemNewAll">ItemNewAll(신간 전체 리스트)</option>
+            <option value="ItemNewSpecial">ItemNewSpecial(주목할 만한 신간 리스트)</option>
+            <option value="ItemEditorChoice">ItemEditorChoice(편집자 추천 리스트
+                (카테고리로만 조회 가능 - 국내도서/음반/외서만 지원))</option>
+            <option value="Bestseller">Bestseller(베스트셀러)</option>
+            <option value="BlogBest">BlogBest(블로거 베스트셀러 (국내도서만 조회 가능))</option>
+        </select>
+        <!-- <input type="text" id="node-input-QueryType2" /> -->
+    </div>
+    <div class="form-row" id="form-row-SearchTarget">
+        <label for="node-input-SearchTarget"> SearchTarget </label>
+        <select
+            type="text"
+            id="node-input-SearchTarget"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="Book">Book(도서)</option>
+            <option value="Foreign">Foreign(외국도서)</option>
+            <option value="Music">Music(음반)</option>
+            <option value="DVD">DVD(DVD)</option>
+            <option value="Used">Used(중고샵(도서/음반/DVD등))</option>
+            <option value="eBook">eBook(전자책)</option>
+            <option value="All">All(위의 모든 타겟(몰))</option>
+        </select>
+        <!-- <input type="text" id="node-input-SearchTarget" /> -->
+    </div>
+    <div class="form-row" id="form-row-SubSearchTarget">
+        <label for="node-input-SubSearchTarget"> SubSearchTarget </label>
+        <select
+            type="text"
+            id="node-input-SubSearchTarget"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="Book">Book(도서)</option>
+            <option value="Music">Music(음반)</option>
+            <option value="DVD">DVD(DVD)</option>
+        </select>
+        <!-- <input type="text" id="node-input-SubSearchTarget" /> -->
+    </div>
+    <div class="form-row" id="form-row-ItemId">
+        <label for="node-input-ItemId"> ItemId </label>
+        <input type="text" id="node-input-ItemId" placeholder="문자열/숫자"/>
+    </div>
+    <div class="form-row" id="form-row-ItemIdType">
+        <label for="node-input-ItemIdType"> ItemIdType </label>
+        <select
+            type="text"
+            id="node-input-ItemIdType"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="ISBN">ISBN(ISBN 10자리)</option>
+            <option value="ISBN13">ISBN13(ISBN 13자리)</option>
+            <option value="ItemId">ItemId(알라딘고유의 값)</option>
+        </select>
+        <!-- <input type="text" id="node-input-ItemIdType" /> -->
+    </div>
+    <div class="form-row" id="form-row-Start">
+        <label for="node-input-Start"> Start </label>
+        <input type="text" id="node-input-Start" placeholder="1이상, 양의 정수(기본값:1)" />
+    </div>
+    <div class="form-row" id="form-row-MaxResults">
+        <label for="node-input-MaxResults"> MaxResults </label>
+        <input type="text" id="node-input-MaxResults" placeholder="1이상 100이하, 양의 정수(기본값:10)" />
+    </div>
+    <div class="form-row" id="form-row-Sort">
+        <label for="node-input-Sort"> Sort </label>
+        <select
+            type="text"
+            id="node-input-Sort"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="Accuracy">Accuracy(관련도)</option>
+            <option value="PublishTime">PublishTime(출간일)</option>
+            <option value="Title">Title(제목)</option>
+            <option value="SalesPoint">SalesPoint(판매량)</option>
+            <option value="CustomerRating">CustomerRating(고객평점)</option>
+            <option value="MyReviewCount">MyReviewCount(마이리뷰갯수)</option>
+        </select>
+        <!-- <input type="text" id="node-input-Sort" /> -->
+    </div>
+    <div class="form-row" id="form-row-Cover">
+        <label for="node-input-Cover"> Cover </label>
+        <select
+            type="text"
+            id="node-input-Cover"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="Mid">Mid(중간 크기: 너비 85px)</option>
+            <option value="MidBig">MidBig(중간 큰 크기 : 너비 150px)</option>
+            <option value="Big">Big(큰 크기 : 너비 200px)</option>
+            <option value="Small">Small(작은 크기 : 너비 75px)</option>
+            <option value="Mini">Mini(매우 작은 크기 : 너비 65px)</option>
+            <option value="None">None(없음)</option>
+        </select>
+        <!-- <input type="text" id="node-input-Cover" /> -->
+    </div>
+    <div class="form-row" id="form-row-CategoryId">
+        <label for="node-input-CategoryId"> CategoryId </label>
+        <input type="text" id="node-input-CategoryId" placeholder="양의정수 - 분야의 고유 번호(기본값:0, 전체)"/>
+    </div>
+    <div class="form-row" id="form-row-Output">
+        <label for="node-input-Output"> Output </label>
+        <select
+            type="text"
+            id="node-input-Output"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="XML">XML(REST XML 형식)</option>
+            <option value="JS">JS(JSON 방식)</option>
+        </select>
+        <!-- <input type="text" id="node-input-Output" /> -->
+    </div>
+    <div class="form-row" id="form-row-Partner">
+        <label for="node-input-Partner"> Partner </label>
+        <input type="text" id="node-input-Partner" placeholder="문자" />
+    </div>
+    <div class="form-row" id="form-row-includeKey">
+        <label for="node-input-includeKey"> includeKey </label>
+        <input type="text" id="node-input-includeKey" placeholder="양의정수(기본값:0)" />
+    </div>
+    <div class="form-row" id="form-row-InputEncoding">
+        <label for="node-input-InputEncoding"> InputEncoding </label>
+        <input type="text" id="node-input-InputEncoding" placeholder="문자열(인코딩의 영문이름 - 기본값:utf-8)" />
+    </div>
+    <div class="form-row" id="form-row-Version">
+        <label for="node-input-Version"> Version </label>
+        <select
+            type="text"
+            id="node-input-Version"
+            style="display: inline-block; vertical-align: middle; width:70%;"
+        >
+            <option value="20070901">20070901</option>
+            <option value="20131101">20131101</option>
+        </select>
+        <!-- <input type="text" id="node-input-Version" /> -->
+    </div>
+    <div class="form-row" id="form-row-outofStockfilter">
+        <label for="node-input-outofStockfilter"> outofStockfilter </label>
+        <input type="text" id="node-input-outofStockfilter" placeholder="양의정수(기본값:0)" />
+    </div>
+    <div class="form-row" id="form-row-offCode">
+        <label for="node-input-offCode"> offCode </label>
+        <input type="text" id="node-input-offCode" placeholder="문자열" />
+    </div>
+    <div class="form-row" id="form-row-OptResult">
+        <label for="node-input-OptResult"> OptResult </label>
+        <input type="text" id="node-input-OptResult" placeholder="OptResult=ebookList,usedList,reviewList 와 같은 Array 형태로 요청" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="aladin">
+    <p>Node-RED wrapper for aladin bookstore TTB API.</p>
+    <h3>Inputs</h3>
+        <dl class="message-properties">
+            <dt>Name<span class="property-type">string</span></dt>
+            <dd>The name of the node. </dd>
+            <dt>Creds<span class="property-type">string</span></dt>
+            <dd>The credential API Key to access the API. | 부여받은 TTBKey값</dd>
+            <dt>RequestType<span class="property-type">string</span></dt>
+            <dd>The type of request you are trying to make.</dd>
+            <dt class="optional">Query <span class="property-type">string | ItemSearch</span></dt>
+            <dd>The string you are searching for in ItemSearch. | 검색어</dd>
+            <dt class="optional">QueryType1 <span class="property-type">select | ItemSearch</span></dt>
+            <dd>The string you are searching for in ItemSearch. | 검색어 종류</dd>
+        </dl>
+        <!-- <ol class="node-ports">
+            <li>
+                <dt class="optional">Query <span class="property-type">string | ItemSearch</span></dt>
+                <dd>The string you are searching for in ItemSearch.</dd>
+            </li>
+        </ol> -->
+    <h3>Outputs</h3>
+        <dl class="message-properties">
+            <dt>payload
+                <span class="property-type">string | buffer</span>
+            </dt>
+            <dd>The string you are searching for in ItemSearch.</dd>
+        </dl>
+    <h3>Details</h3>
+    <p>Some more information about the node.</p>
+    <h4>A sub section</h4>
+    <p>just testing if h4 tag also folds. <code> h4 tag does not fold.</code></p>
+</script>
+<!-- 노드 변수 입력 끝 -->
+
+<!-- Config - aladinTTBKey 변수 입력 시작  -->
+<script type="text/javascript">
+    RED.nodes.registerType('aladinTTBKey', {
+        category: 'config',
+        defaults: {
+            name: {value: ""}
+        },
+        credentials: {
+            TTBKey: {},
+        },
+        label: function () {
+            return this.name || 'aladinTTBKey';
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="aladinTTBKey">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-bookmark"></i> Name </label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-TTBKey"><i class="fa fa-key"></i> TTBKey</label>
+        <input type="text" id="node-config-input-TTBKey" placeholder="TTBKey">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="aladinTTBKey">
+    <p>Node-RED config for aladinTTBKey for aladin bookstore TTB API.</p>
+</script>
