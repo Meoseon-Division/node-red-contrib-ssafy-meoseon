@@ -1,0 +1,32 @@
+{
+	"name": "node-red-contrib-ssafy-meoseon",
+	"version": "0.0.1",
+	"description": "ssafy meoseon e-commerce extensions pack for Node-RED",
+	"keywords": [
+		"node-red",
+		"e-commerce",
+		"SASM",
+		"Shopping",
+		"shopping-data-formatting"
+	],
+	"license": "Apache 2.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Meoseon-Division/node-red-contrib-ssafy-meoseon"
+	},
+	"node-red": {
+		"nodes": {
+			"11st-shopping": "Meoseon/11st-shopping.js",
+			"Aladin": "Meoseon/Aladin.js",
+			"Meoseon-NaverBooks": "Meoseon/Meoseon-NaverBooks.js",
+			"Meoseon-Ship": "Meoseon/Meoseon-Ship.js",
+			"NaverShopping": "Meoseon/NaverShopping.js",
+			"shopping-filter": "Meoseon/shopping-filter.js"
+		}
+	},
+	"dependencies": {
+		"axios": "^0.22.0",
+		"iconv-lite": "^0.6.3",
+		"xml-js": "^1.6.11"
+	}
+}
