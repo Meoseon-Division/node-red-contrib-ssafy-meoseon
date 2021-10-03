@@ -385,14 +385,14 @@
 </script>
 
 <script type="text/html" data-help-name="aladin">
-	<p>Node-RED wrapper for aladin bookstore TTB API.</p>
+	<p>Node-RED wrapper for aladin bookstore TTB API. | 노드-레드를 위한 알라딘 온라인서점 TTB API 래퍼입니다.</p>
 	<h3>Inputs</h3>
 	<dl class="message-properties">
 		<dt>Name<span class="property-type">string</span></dt>
 		<dd>The name of the node.</dd>
-		<dt>Creds<span class="property-type">string</span></dt>
+		<dt>Creds<span class="property-type">config</span></dt>
 		<dd>The credential API Key to access the API. | 부여받은 TTBKey값</dd>
-		<dt>RequestType<span class="property-type">string</span></dt>
+		<dt>RequestType<span class="property-type">select</span></dt>
 		<dd>The type of request you are trying to make.</dd>
 		<dt class="optional">
 			Query <span class="property-type">string | ItemSearch</span>
@@ -401,7 +401,97 @@
 		<dt class="optional">
 			QueryType1 <span class="property-type">select | ItemSearch</span>
 		</dt>
-		<dd>The string you are searching for in ItemSearch. | 검색어 종류</dd>
+		<dd>The type you are searching for in ItemSearch. | 검색어 종류</dd>
+		<dt>
+			QueryType2 <span class="property-type">select | ItemList</span>
+		</dt>
+		<dd>The type of List you are searching for in ItemList. | 리스트 종류</dd>
+		<dt class="optional">
+			SearchTarget <span class="property-type">select | ItemSearch, ItemList </span>
+		</dt>
+		<dd>The type of Mall you are trying to search. | 검색 대상 Mall</dd>
+		<dt class="optional">
+			SubSearchTarget <span class="property-type">select | ItemList </span>
+		</dt>
+		<dd>If your SearchTarget is Used, the sub Mall to search. | SearchTarget이 중고(Used)인 경우, 서브 Mall 지정</dd>
+		<dt class="optional">
+			ItemId <span class="property-type">string/integer | ItemLookUp, ItemOffStoreList </span>
+		</dt>
+		<dd>The unique identifier for a item. (Choose either integer or ISBN via ItemIdType) | 상품을 구분짓는 유일한 값
+			(ItemIdType으로 정수값과 ISBN중에 택일)
+		</dd>
+		<dt class="optional">
+			ItemIdType <span class="property-type">select | ItemLookUp, ItemOffStoreList </span>
+		</dt>
+		<dd>Choose between aladin original ItemId or ISBN for which ItemId corresponds to. Please use the 13-digit ISBN if possible. |
+			조회용 파라미터인 ItemId가 ISBN으로 입력되었는지, 알라딘고유의"ItemId"값으로 입력되었는지 선택. 가급적 13자리 ISBN을 이용해주세요
+		</dd>
+		<dt class="optional">
+			Start <span class="property-type">integer | ItemSearch, ItemList </span>
+		</dt>
+		<dd>Starting page for search result. | 검색결과 시작페이지</dd>
+		<dt class="optional">
+			MaxResults <span class="property-type">integer | ItemSearch, ItemList </span>
+		</dt>
+		<dd>Maximum number of outputs per page of search results | 검색결과 한 페이지당 최대 출력 개수</dd>
+		<dt class="optional">
+			Sort <span class="property-type">select | ItemSearch </span>
+		</dt>
+		<dd>Sorting order | 정렬순서</dd>
+		<dt class="optional">
+			Cover <span class="property-type">select | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>Size of the cover image | 표지크기</dd>
+		<dt class="optional">
+			CategoryId <span class="property-type">integer | ItemSearch, ItemList </span>
+		</dt>
+		<dd>Limits the search result to specific fields. <a href="http://image.aladin.co.kr/img/files/aladin_Category_CID_20200626.xls">Reference: Categories of All Fields in Aladin</a> | 특정 분야로 검색결과를 제한함. <a href="http://image.aladin.co.kr/img/files/aladin_Category_CID_20200626.xls">참고: 알라딘 모든 분야 카테고리</a></dd>
+		<dt class="optional">
+			Output <span class="property-type">select | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>Method of Output | 출력방법</dd>
+		<dt class="optional">
+			Partner <span class="property-type">select | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>Partner code related to affiliations. In the case of an affiliate, checks the validity of the affiliate by the entered partner code. | 
+			제휴와 관련한 파트너코드. 제휴사의 경우 파트너코드 입력으로 제휴사 유효성 체크.
+		</dd>
+		<dt class="optional">
+			includeKey <span class="property-type">integer | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>If includeKey is 1, TTBKey is included in the product page link. | 
+			includeKey가 1인 경우 결과의 상품페이지 링크값에 TTBKey가 포함됨.
+		</dd>
+		<dt class="optional">
+			InputEncoding <span class="property-type">integer | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>Set the encoding value of the search query. The English code of the encoding, for example, "utf-8" or "euc-kr". | 
+			검색어의 인코딩 값을 설정. "utf-8"이나 "euc-kr"과 같은 인코딩의 영문이름.
+		</dd>
+		<dt class="optional">
+			Version <span class="property-type">select | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>Set the Version (date format) of the search API.(Latest version: 20131101) | 
+			검색API의 Version(날짜형식)을 설정.(최신버젼: 20131101)
+		</dd>
+		<dt class="optional">
+			outofStockfilter <span class="property-type">integer | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>Filter out-of-stock products("1" to filter out) | 
+			품절/절판 등 재고 없는 상품 필터링("1"이 제외 필터)
+		</dd>
+		<dt class="optional">
+			offCode <span class="property-type">string | ItemLookUp </span>
+		</dt>
+		<dd>OffCode value of second-hand store obtained from ItemOffStoreList API | 
+			중고상품 보유 매장 검색 API에서 얻어낸 중고매장의 offCode값
+		</dd>
+		<dt class="optional">
+			OptResult <span class="property-type">string, Array | ItemSearch, ItemList, ItemLookUp </span>
+		</dt>
+		<dd>Additional information ※ request in the form of an Array such as OptResult=ebookList,usedList,reviewList | 
+			부가 정보 ※ 요청시 OptResult=ebookList,usedList,reviewList 와 같은 Array 형태로 요청
+		</dd>
 	</dl>
 	<h3>Outputs</h3>
 	<dl class="message-properties">
@@ -412,9 +502,14 @@
 		<dd>The string you are searching for in ItemSearch.</dd>
 	</dl>
 	<h3>Details</h3>
-	<p>Some more information about the node.</p>
-	<h4>A sub section</h4>
-	<p>just testing if h4 tag also folds. <code> h4 tag does not fold.</code></p>
+	<p>알라딘 온라인서점에서 제공하는 API를 노드-레드에서 사용할 수 있게 만든 노드입니다. API Key가 필요하므로 아래 참고자료를 통해 회원가입 후 신청하시기 바랍니다.</p>
+	<h4>유의사항</h4>
+	<p>Edit dialog 외에도 <code>msg</code>에 담겨온 변수를 입력받으며, <code>msg</code>의 우선순위가 더 높다. 아래 코드 예시를 참조하면 된다.<p>
+	<code>[{"id":"8b8ff774cbe81686","type":"tab","label":"Flow 2","disabled":false,"info":""},{"id":"aa0b1bd2340aa1b8","type":"inject","z":"8b8ff774cbe81686","name":"","props":[{"p":"Query","v":"harry potter stone","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payloadType":"str","x":130,"y":160,"wires":[["3e7596e23ef7b29c"]]},{"id":"3e7596e23ef7b29c","type":"aladin","z":"8b8ff774cbe81686","name":"","creds":"","RequestType":"ItemSearch","Query":"","QueryType1":"","QueryType2":"","SearchTarget":"Book","SubSearchTarget":"","ItemId":"","ItemIdType":"ISBN","Start":"","MaxResults":"","Sort":"Accuracy","Cover":"Mid","CategoryId":"","Output":"JS","Partner":"","includeKey":"","InputEncoding":"","Version":"20131101","outofStockfilter":"","offCode":"","OptResult":"","x":330,"y":160,"wires":[["e69f5dbd476f6cfa"]]},{"id":"e69f5dbd476f6cfa","type":"debug","z":"8b8ff774cbe81686","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":550,"y":160,"wires":[]}]</code>
+	<h4>참고자료</h4>
+	<a href="https://www.aladin.co.kr/">알라딘</a>
+	<a href="https://www.aladin.co.kr/ttb/">알라딘 TTB API 소개</a>
+	<a href="https://docs.google.com/document/d/1mX-WxuoGs8Hy-QalhHcvuV17n50uGI2Sg_GHofgiePE/edit#">알라딘 TTB API 매뉴얼</a>
 </script>
 
 <script type="text/html" data-template-name="aladinTTBKey">
