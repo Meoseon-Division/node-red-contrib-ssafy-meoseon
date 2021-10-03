@@ -21,7 +21,8 @@
 			"Meoseon-NaverBooks": "Meoseon/Meoseon-NaverBooks.js",
 			"Meoseon-Ship": "Meoseon/Meoseon-Ship.js",
 			"NaverShopping": "Meoseon/NaverShopping.js",
-			"shopping-filter": "Meoseon/shopping-filter.js"
+			"shopping-filter": "Meoseon/shopping-filter.js",
+			"Shopping": "Meoseon/Meoseon-Shopping.js"
 		}
 	},
 	"dependencies": {
