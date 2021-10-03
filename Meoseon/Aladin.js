@@ -1,6 +1,6 @@
 module.exports = function (RED) {
+	'use strict';
 	const axios = require('axios');
-
 	function AladinNode(config) {
 		RED.nodes.createNode(this, config);
 
@@ -36,7 +36,7 @@ module.exports = function (RED) {
 		node.params['offCode'] = config.offCode;
 		node.params['OptResult'] = config.OptResult;
 
-		this.on('input', function (msg, send, done) {
+		node.on('input', (msg, send, done) => {
 			node.params['TTBKey'] = msg.TTBKey || node.params['TTBKey'];
 			node.params['Query'] = msg.Query || node.params['Query'];
 			node.params['RequestType'] =
@@ -46,10 +46,8 @@ module.exports = function (RED) {
 			} else {
 				node.params['QueryType'] = msg.QueryType2 || node.params['QueryType'];
 			}
-			node.params['SearchTarget'] =
-				msg.SearchTarget || node.params['SearchTarget'];
-			node.params['SubSearchTarget'] =
-				msg.SubSearchTarget || node.params['SubSearchTarget'];
+			node.params['SearchTarget'] =msg.SearchTarget || node.params['SearchTarget'];
+			node.params['SubSearchTarget'] =msg.SubSearchTarget || node.params['SubSearchTarget'];
 			node.params['ItemId'] = msg.ItemId || node.params['ItemId'];
 			node.params['ItemIdType'] = msg.ItemIdType || node.params['ItemIdType'];
 			node.params['Start'] = msg.Start || node.params['Start'];
@@ -69,6 +67,7 @@ module.exports = function (RED) {
 			node.params['OptResult'] = msg.OptResult || node.params['OptResult'];
 
 			msg.params = node.params;
+
 			if (config.RequestType === 'ItemSearch') {
 				console.log('This is:', config.RequestType);
 				axios
@@ -78,6 +77,9 @@ module.exports = function (RED) {
 					.then((response) => {
 						msg.payload = response.data;
 						node.send(msg);
+					})
+					.catch((error) => {
+						node.error('요청에서 에러를 확인했습니다.');
 					});
 			} else if (config.RequestType === 'ItemList') {
 				axios
@@ -87,6 +89,9 @@ module.exports = function (RED) {
 					.then((response) => {
 						msg.payload = response.data;
 						node.send(msg);
+					})
+					.catch((error) => {
+						node.error('요청에서 에러를 확인했습니다.');
 					});
 			} else if (config.RequestType === 'ItemLookUp') {
 				axios
@@ -96,6 +101,9 @@ module.exports = function (RED) {
 					.then((response) => {
 						msg.payload = response.data;
 						node.send(msg);
+					})
+					.catch((error) => {
+						node.error('요청에서 에러를 확인했습니다.');
 					});
 			} else if (config.RequestType === 'ItemOffStoreList') {
 				axios
@@ -105,6 +113,9 @@ module.exports = function (RED) {
 					.then((response) => {
 						msg.payload = response.data;
 						node.send(msg);
+					})
+					.catch((error) => {
+						node.error('요청에서 에러를 확인했습니다.');
 					});
 			} else {
 				if (done) {
@@ -116,11 +127,13 @@ module.exports = function (RED) {
 		});
 	}
 	RED.nodes.registerType('aladin', AladinNode);
+
 	function AladinTTBKeyNode(config) {
 		RED.nodes.createNode(this, config);
 		this.name = config.name;
 		this.TTBKey = config.TTBKey;
 	}
+
 	RED.nodes.registerType('aladinTTBKey', AladinTTBKeyNode, {
 		credentials: {
 			TTBKey: { type: 'text' },
