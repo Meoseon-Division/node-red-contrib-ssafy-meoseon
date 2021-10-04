@@ -4,7 +4,7 @@
     color: '#ffffff',
     defaults: {
       name: { value: '' },
-      vendor: { value: '', required: false },
+      apiType: { value: '', required: false },
       sorttype: { value: '', required: false },
       minprice: { value: '', required: false },
       maxprice: { value: '', required: false },
@@ -22,7 +22,7 @@
     color: '#ffffff',
     defaults: {
       name: { value: '' },
-      vendor: { value: '' },
+      apiType: { value: '' },
     },
     inputs: 1,
     outputs: 1,
@@ -39,8 +39,8 @@
       <input type="text" id="node-input-name" placeholder="Name">
   </div>
   <div class="form-row">
-      <label for="node-input-vendor"><i class="icon-tag"></i> Vendor</label>
-      <select id="node-input-vendor" name="node-input-vendor">
+      <label for="node-input-apiType"><i class="icon-tag"></i> apiType</label>
+      <select id="node-input-apiType" name="node-input-apiType">
           <option value="naver">Naver</option>
           <option value="11st">11st</option>
       </select>
@@ -89,8 +89,8 @@
       <input type="text" id="node-input-name" placeholder="Name">
   </div>
   <div class="form-row">
-      <label for="node-input-vendor"><i class="icon-tag"></i> Vendor</label>
-      <select id="node-input-vendor" name="node-input-vendor">
+      <label for="node-input-apiType"><i class="icon-tag"></i> apiType</label>
+      <select id="node-input-apiType" name="node-input-apiType">
           <option value="naver">Naver</option>
           <option value="11st">11st</option>
       </select>
