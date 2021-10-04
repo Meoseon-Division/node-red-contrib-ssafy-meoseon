@@ -160,8 +160,6 @@ module.exports = function (RED) {
                         responseType: "arraybuffer",
                     })
                     .then((response) => {
-                        msg.payload = response;
-                        node.send(msg);
                         const decoded = iconv.decode(response.data, "EUC-KR");
                         msg.payload = convert.xml2js(decoded, {
                             compact: true,
