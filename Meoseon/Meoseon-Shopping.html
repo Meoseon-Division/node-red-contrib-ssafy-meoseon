@@ -1,5 +1,11 @@
 <script type="text/html" data-template-name="shopping">
     <div class="form-row">
+        <div class="form-row">
+            <label for="node-input-name">
+                <i class="fa fa-tag"></i> Name
+            </label>
+            <input type="text" id="node-input-name" data-i18n="[placeholder]Name">
+        </div>
         <label for="node-input-apiType">
             <i class="fa fa-cube fa-fw"></i> API Type
         </label>
@@ -11,12 +17,6 @@
 
     <!-- naver shopping -->
     <div id="naver-shopping-area">
-        <div class="form-row">
-            <label for="node-input-naverShoppingName">
-                <i class="fa fa-tag"></i> Name
-            </label>
-            <input type="text" id="node-input-naverShoppingName" data-i18n="[placeholder]Name">
-        </div>
         <div class="form-row">
             <label for="node-input-naverShoppingCreds">
                 <i class="fa fa-key fa-fw"></i> API Key
@@ -71,10 +71,6 @@
 
     <!-- sk11st -->
     <div id="sk11st-area">
-        <div class="form-row">
-            <label for="node-input-sk11stName"> <i class="fa fa-tag fa-fw"></i> Name</label>
-            <input type="text" id="node-input-sk11stName" placeholder="Name" />
-        </div>
         <div class="form-row">
             <label for="node-input-sk11stCreds"> <i class="fa fa-key"></i> API Key </label>
             <input type="text" id="node-input-sk11stCreds" />
@@ -161,12 +157,12 @@
 <script type="text/javascript">
     RED.nodes.registerType("shopping", {
         color: "#04cf5c",
-        category: "SASM Ecommerce Extensions Pack",
+        category: "Samsung AutomationStudio",
         defaults: {
+            name: { value: "Shopping" },
             apiType: { value: "naverShopping", required: true },
 
             // naver shopping
-            naverShoppingName: { value: "Shopping" },
             naverShoppingReturnType: { value: "json", required: true },
             naverShoppingQuery: { value: "", required: true },
             naverShoppingDisplay: { value: "10", required: true },
@@ -180,7 +176,6 @@
             },
 
             // sk11st
-            sk11stName: { value: "Shopping" },
             sk11stApiCode: { value: "", required: true },
             sk11stKeyword: { value: "", type: "text", required: false },
             sk11stCategoryCode: { value: "", type: "text", required: false },
