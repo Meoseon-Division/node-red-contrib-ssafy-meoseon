@@ -6,70 +6,26 @@ module.exports = function (RED) {
 
 		const node = this;
 		this.name = config.name;
-		node.RequestType = config.RequestType;
-
-		node.params = {};
-		node.params['TTBKey'] =
-			RED.nodes.getNode(config.creds).credentials.TTBKey || '';
-		node.params['Query'] = config.Query;
-		node.params['RequestType'] = config.RequestType;
-		if (node.params.RequestType === 'ItemSearch') {
-			node.params['QueryType'] = config.QueryType1;
-		} else {
-			node.params['QueryType'] = config.QueryType2;
+		
+		const temp = {
+			TTBKey: RED.nodes.getNode(config.creds).credentials.TTBKey || '',
+			QueryType: config.RequestType === 'ItemSearch' ? config.QueryType1 : config.QueryType2
 		}
-		node.params['SearchTarget'] = config.SearchTarget;
-		node.params['SubSearchTarget'] = config.SubSearchTarget;
-		node.params['ItemId'] = config.ItemId;
-		node.params['ItemIdType'] = config.ItemIdType;
-		node.params['Start'] = config.Start;
-		node.params['MaxResults'] = config.MaxResults;
-		node.params['Sort'] = config.Sort;
-		node.params['Cover'] = config.Cover;
-		node.params['CategoryId'] = config.CategoryId;
-		node.params['Output'] = config.Output;
-		node.params['Partner'] = config.Partner;
-		node.params['includeKey'] = config.includeKey;
-		node.params['InputEncoding'] = config.InputEncoding;
-		node.params['Version'] = config.Version;
-		node.params['outofStockfilter'] = config.outofStockfilter;
-		node.params['offCode'] = config.offCode;
-		node.params['OptResult'] = config.OptResult;
-
+		node.params = Object.assign({}, config, temp)
+		
 		node.on('input', (msg, send, done) => {
-			node.params['TTBKey'] = msg.TTBKey || node.params['TTBKey'];
-			node.params['Query'] = msg.Query || node.params['Query'];
-			node.params['RequestType'] =
-				msg.RequestType || node.params['RequestType'];
+			node.params = Object.assign(node.params, msg)
+			
 			if (node.params.RequestType === 'ItemSearch') {
-				node.params['QueryType'] = msg.QueryType1 || node.params['QueryType'];
+				node.params['QueryType'] = msg.QueryType || msg.QueryType1 || node.params['QueryType'];
 			} else {
-				node.params['QueryType'] = msg.QueryType2 || node.params['QueryType'];
+				node.params['QueryType'] = msg.QueryType || msg.QueryType2 || node.params['QueryType'];
 			}
-			node.params['SearchTarget'] =msg.SearchTarget || node.params['SearchTarget'];
-			node.params['SubSearchTarget'] =msg.SubSearchTarget || node.params['SubSearchTarget'];
-			node.params['ItemId'] = msg.ItemId || node.params['ItemId'];
-			node.params['ItemIdType'] = msg.ItemIdType || node.params['ItemIdType'];
-			node.params['Start'] = msg.Start || node.params['Start'];
-			node.params['MaxResults'] = msg.MaxResults || node.params['MaxResults'];
-			node.params['Sort'] = msg.Sort || node.params['Sort'];
-			node.params['Cover'] = msg.Cover || node.params['Cover'];
-			node.params['CategoryId'] = msg.CategoryId || node.params['CategoryId'];
-			node.params['Output'] = msg.Output || node.params['Output'];
-			node.params['Partner'] = msg.Partner || node.params['Partner'];
-			node.params['includeKey'] = msg.includeKey || node.params['includeKey'];
-			node.params['InputEncoding'] =
-				msg.InputEncoding || node.params['InputEncoding'];
-			node.params['Version'] = msg.Version || node.params['Version'];
-			node.params['outofStockfilter'] =
-				msg.outofStockfilter || node.params['outofStockfilter'];
-			node.params['offCode'] = msg.offCode || node.params['offCode'];
-			node.params['OptResult'] = msg.OptResult || node.params['OptResult'];
-
+			
 			msg.params = node.params;
 
 			if (config.RequestType === 'ItemSearch') {
-				console.log('This is:', config.RequestType);
+				// console.log('This is:', config.RequestType);
 				axios
 					.get('http://www.aladin.co.kr/ttb/api/ItemSearch.aspx', {
 						params: node.params,
