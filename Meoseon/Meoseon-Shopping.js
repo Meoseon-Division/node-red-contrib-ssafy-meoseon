@@ -47,6 +47,30 @@ module.exports = function (RED) {
     return new NodeContext(view, this.nodeContext, this.msgContext);
   };
 
+  function sk11stApiGetRequest(node, msg) {
+    axios
+      .get(SK11ST_API_URL, {
+        params: node.params,
+        responseType: "arraybuffer",
+      })
+      .then((response) => {
+        node.status({ fill: "green", shape: "dot", text: "success" });
+        node.log("sk11st shopping query success", msg);
+        const decoded = iconv.decode(response.data, "EUC-KR");
+        msg.payload = convert.xml2js(decoded, {
+          compact: true,
+          spaces: 4,
+        });
+        node.send(msg);
+      })
+      .catch((error) => {
+        node.status({ fill: "red", shape: "dot", text: "error" });
+        node.error("sk11st shopping query failed", msg);
+        msg.payload = error.message;
+        node.send(msg);
+      });
+  }
+
   function shoppingNode(n) {
     RED.nodes.createNode(this, n);
 
@@ -211,61 +235,16 @@ module.exports = function (RED) {
         if (n.sk11stApiCode === "ProductSearch") {
           for (const idx in keywords) {
             node.params["keyword"] = keywords[idx];
-            axios
-              .get(SK11ST_API_URL, {
-                params: node.params,
-                responseType: "arraybuffer",
-              })
-              .then((response) => {
-                node.status({ fill: "green", shape: "dot", text: "success" });
-                node.log("sk11st shopping query success", msg);
-                const decoded = iconv.decode(response.data, "EUC-KR");
-                msg.payload = convert.xml2js(decoded, {
-                  compact: true,
-                  spaces: 4,
-                });
-                node.send(msg);
-              })
-              .catch((error) => {
-                node.status({ fill: "red", shape: "dot", text: "error" });
-                node.error("sk11st shopping query failed", msg);
-                msg.payload = error.message;
-                node.send(msg);
-              });
+            sk11stApiGetRequest(node, msg);
           }
         } else {
-          axios
-            .get(SK11ST_API_URL, {
-              params: node.params,
-              responseType: "arraybuffer",
-            })
-            .then((response) => {
-              node.status({ fill: "green", shape: "dot", text: "success" });
-              node.log("sk11st shopping query success", msg);
-              const decoded = iconv.decode(response.data, "EUC-KR");
-              msg.payload = convert.xml2js(decoded, {
-                compact: true,
-                spaces: 4,
-              });
-              node.send(msg);
-            })
-            .catch((error) => {
-              node.status({ fill: "red", shape: "dot", text: "error" });
-              node.error("sk11st shopping query failed", msg);
-              msg.payload = error.message;
-              node.send(msg);
-            });
+          sk11stApiGetRequest(node, msg);
         }
       }
     });
   }
 
-  RED.nodes.registerType("shopping", shoppingNode, {
-    credentials: {
-      clientId: { type: "text" },
-      clientSecret: { type: "text" },
-    },
-  });
+  RED.nodes.registerType("shopping", shoppingNode, {});
 
   // naver shopping API key
   function naverShoppingApiKey(n) {
@@ -276,8 +255,8 @@ module.exports = function (RED) {
 
   RED.nodes.registerType("naverShoppingApiKey", naverShoppingApiKey, {
     credentials: {
-      clientId: { type: "text" },
-      clientSecret: { type: "text" },
+      clientId: { type: "text", required: true },
+      clientSecret: { type: "password", required: true },
     },
   });
 
@@ -289,7 +268,7 @@ module.exports = function (RED) {
 
   RED.nodes.registerType("sk11stApiKey", sk11stApiKey, {
     credentials: {
-      apikey: { type: "text" },
+      apikey: { type: "password", required: true },
     },
   });
 };

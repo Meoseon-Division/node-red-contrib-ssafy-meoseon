@@ -114,37 +114,37 @@
         <option value="ProductImage">ProductImage(상품이미지조회)</option>
       </select>
     </div>
-    <div class="form-row" id="node-input-sk11stKeyword-row">
+    <div class="form-row sk11st-element sk11st-element-productsearch" id="node-input-sk11stKeyword-row">
       <label for="node-input-sk11stKeyword"> Keyword* </label>
       <input type="text" id="node-input-sk11stKeyword" />
     </div>
-    <div class="form-row" id="node-input-sk11stCategoryCode-row">
+    <div class="form-row sk11st-element sk11st-element-categoryinfo" id="node-input-sk11stCategoryCode-row">
       <label for="node-input-sk11stCategoryCode"> categoryCode* </label>
       <input type="text" id="node-input-sk11stCategoryCode" />
     </div>
-    <div class="form-row" id="node-input-sk11stProductCode-row">
+    <div class="form-row sk11st-element sk11st-element-productinfo sk11st-element-productimage" id="node-input-sk11stProductCode-row">
       <label for="node-input-sk11stProductCode"> productCode* </label>
       <input type="text" id="node-input-sk11stProductCode" />
     </div>
     <div id="sk11st-product-category-common">
-      <div class="form-row" id="node-input-sk11stPagenum-row">
+      <div class="form-row sk11st-element sk11st-element-productsearch sk11st-element-categoryinfo" id="node-input-sk11stPagenum-row">
         <label for="node-input-sk11stPagenum"> pageNum </label>
         <input type="text" id="node-input-sk11stPagenum" />
       </div>
-      <div class="form-row">
+      <div class="form-row sk11st-element sk11st-element-productsearch sk11st-element-categoryinfo" id="node-input-sk11stPagesize-row">
         <label for="node-input-sk11stPagesize"> pageSize </label>
         <input type="text" id="node-input-sk11stPagesize" />
       </div>
-      <div class="form-row">
+      <div class="form-row sk11st-element sk11st-element-productsearch sk11st-element-categoryinfo" id="node-input-sk11stSortcd-row">
         <label for="node-input-sk11stSortcd"> sortCd </label>
         <input type="text" id="node-input-sk11stSortcd" />
       </div>
     </div>
-    <div class="form-row" id="node-input-sk11stOption-row">
+    <div class="form-row sk11st-element sk11st-element-productsearch sk11st-element-categoryinfo sk11st-element-productinfo" id="node-input-sk11stOption-row">
       <label for="node-input-sk11stOption"> option </label>
       <input type="text" id="node-input-sk11stOption" />
     </div>
-    <div class="form-row" id="node-input-sk11stTargetSearchPrd-row">
+    <div class="form-row sk11st-element sk11st-element-productsearch" id="node-input-sk11stTargetSearchPrd-row">
       <label for="node-input-sk11stTargetSearchPrd"> targetSearchPrd</label>
       <input type="text" id="node-input-sk11stTargetSearchPrd" />
     </div>
@@ -276,172 +276,203 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType("shopping", {
-        color: "#04cf5c",
-        category: "SASM Ecommerce Extensions Pack",
-        defaults: {
-            name: { value: "Shopping" },
-            apiType: { value: "naverShopping", required: true },
+  RED.nodes.registerType("shopping", {
+    color: "#04cf5c",
+    category: "SASM Ecommerce Extensions Pack",
+    defaults: {
+      name: { value: "Shopping" },
+      apiType: { value: "naverShopping", required: true },
 
-            // naver shopping
-            naverShoppingReturnType: { value: "json", required: true },
-            naverShoppingQuery: { value: "", required: false },
-            naverShoppingDisplay: { value: "10", required: false },
-            naverShoppingSort: { value: "sim", required: true },
-            naverShoppingStart: { value: "1", required: false },
-            naverShoppingFilter: { value: "", required: false },
-            naverShoppingCreds: {
-                value: {},
-                type: "naverShoppingApiKey",
-                required: false
-            },
+      // naver shopping
+      naverShoppingReturnType: { value: "json", required: true },
+      naverShoppingQuery: { value: "", validate:function(v) {
+          if($("#node-input-apiType option:selected").val() !== "naverShopping") return true;
+          if(v.length === 0) return false;
+          return true;
+        }
+      },
+      naverShoppingDisplay: { value: "10", validate:function(v) {
+          if($("#node-input-apiType option:selected").val() !== "naverShopping") return true;
+          if(v.length === 0) return false;
+          return true;
+        }
+      },
+      naverShoppingSort: { value: "sim", required: true },
+      naverShoppingStart: { value: "1", validate:function(v) {
+        if($("#node-input-apiType option:selected").val() !== "naverShopping") return true;
+        if(v.length === 0) return false;
+        return true;
+        }
+      },
+      naverShoppingFilter: { value: "", required: false },
+      naverShoppingCreds: {
+        value: "",
+        type: "naverShoppingApiKey",
+        validate:function(v) {
+          if($("#node-input-apiType option:selected").val() !== "naverShopping") return true;
+          if($("#node-input-naverShoppingCreds option:selected").val() === "_ADD_") return false;
+          return true;
+        }
+      },
 
-            // sk11st
-            sk11stApiCode: { value: "ProductSearch", required: true },
-            sk11stKeyword: { value: "", type: "text", required: false },
-            sk11stCategoryCode: { value: "", type: "text", required: false },
-            sk11stProductCode: { value: "", type: "text", required: false },
-            sk11stPagenum: { value: "1", type: "text", required: false },
-            sk11stPagesize: { value: "50", type: "text", required: false },
-            sk11stSortcd: { value: "", type: "text", required: false },
-            sk11stOption: { value: "", type: "text", required: false },
-            sk11stTargetSearchPrd: { value: "", type: "text", required: false },
-            sk11stCreds: {
-                value: {},
-                type: "sk11stApiKey",
-                required: false
-            },
-        },
-        inputs: 1,
-        outputs: 1,
-        paletteLabel: "Shopping",
-        icon: "Shopping.png",
-        label: function () {
-            return this.name || 'Shopping';
-        },
+      // sk11st
+      sk11stApiCode: { value: "ProductSearch", required: true },
+      sk11stKeyword: { value: "", type: "text", validate:function(v) {
+          if($("#node-input-apiType option:selected").val() !== "sk11st") return true;
+          if($("#node-input-sk11stApiCode option:selected").val() !== "ProductSearch") return true;
+          if(v.length === 0) return false;
+          return true;
+        } 
+      },
+      sk11stCategoryCode: { value: "", type: "text", validate:function(v) {
+          if($("#node-input-apiType option:selected").val() !== "sk11st") return true;
+          if($("#node-input-sk11stApiCode option:selected").val() !== "CategoryInfo") return true;
+          if(v.length === 0) return false;
+          return true;
+        }
+      },
+      sk11stProductCode: { value: "", type: "text", validate:function(v) {
+          if($("#node-input-apiType option:selected").val() !== "sk11st") return true;
+          let apiCode = $("#node-input-sk11stApiCode option:selected").val();
+          if(apiCode !== "ProductInfo" && apiCode !== "ProductImage") return true;
+          if(v.length === 0) return false;
+          return true;
+        }
+      },
+      sk11stPagenum: { value: "1", type: "text", required: false },
+      sk11stPagesize: { value: "50", type: "text", required: false },
+      sk11stSortcd: { value: "", type: "text", required: false },
+      sk11stOption: { value: "", type: "text", required: false },
+      sk11stTargetSearchPrd: { value: "", type: "text", required: false },
+      sk11stCreds: {
+        value: {},
+        type: "sk11stApiKey",
+        validate:function(v) {
+          if($("#node-input-apiType option:selected").val() !== "sk11st") return true;
+          if($("#node-input-sk11stCreds option:selected").val() === "_ADD_") return false;
+          return true;
+        }
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    paletteLabel: "Shopping",
+    icon: "Shopping.png",
+    label: function () {
+      return this.name || "Shopping";
+    },
 
-        oneditprepare: function () {
-            $("#node-input-apiType").change(function () {
-                var type = $("#node-input-apiType option:selected").val();
-                switch(type) {
-                    case "naverShopping":
-                        $("#naver-shopping-area").show();
-                        $("#sk11st-area").hide();
-                        break;
+    oneditprepare: function () {
+      $("#node-input-apiType").change(function () {
+        var type = $("#node-input-apiType option:selected").val();
+        switch (type) {
+          case "naverShopping":
+            $("#naver-shopping-area").show();
+            $("#sk11st-area").hide();
+            break;
 
-                    case "sk11st":
-                        $("#naver-shopping-area").hide();
-                        $("#sk11st-area").show();
-                        break;
+          case "sk11st":
+            $("#naver-shopping-area").hide();
+            $("#sk11st-area").show();
+            break;
 
-                    default:
-                        break;
-                }
-            });
-            $("#node-input-apiType").change();
+          default:
+            break;
+        }
+      });
+      $("#node-input-apiType").change();
 
-            // sk11st
-            $("#node-input-sk11stApiCode").change(function () {
-                var type = $("#node-input-sk11stApiCode option:selected").val();
-                if (type == "CategoryInfo") {
-                    $("#node-input-sk11stProductCode-row").hide();
-                    $("#node-input-sk11stTargetSearchPrd-row").hide();
-                    $("#node-input-sk11stKeyword-row").hide();
-                    $("#node-input-sk11stCategoryCode-row").show();
-                    $("#sk11st-product-category-common").show();
-                    $("#node-input-sk11stOption-row").show();
-                } else if (type == "ProductImage") {
-                    $("#node-input-sk11stCategoryCode-row").hide();
-                    $("#node-input-sk11stKeyword-row").hide();
-                    $("#sk11st-product-category-common").hide();
-                    $("#node-input-sk11stOption-row").hide();
-                    $("#node-input-sk11stTargetSearchPrd-row").hide();
-                    $("#node-input-sk11stProductCode-row").show();
-                } else if (type == "ProductInfo") {
-                    $("#node-input-sk11stCategoryCode-row").hide();
-                    $("#node-input-sk11stKeyword-row").hide();
-                    $("#sk11st-product-category-common").hide();
-                    $("#node-input-sk11stTargetSearchPrd-row").hide();
-                    $("#node-input-sk11stOption-row").show();
-                    $("#node-input-sk11stProductCode-row").show();
-                } else {
-                    //ProdcutSearch
-                    $("#node-input-sk11stCategoryCode-row").hide();
-                    $("#node-input-sk11stProductCode-row").hide();
-                    $("#node-input-sk11stKeyword-row").show();
-                    $("#sk11st-product-category-common").show();
-                    $("#node-input-sk11stOption-row").show();
-                    $("#node-input-sk11stTargetSearchPrd-row").show();
-                }
-            });
-            $("#node-input-sk11stApiCode").change();
-        },
-    });
+      // sk11st
+      $("#node-input-sk11stApiCode").change(function () {
+        $(".sk11st-element").hide();
+        let type = $("#node-input-sk11stApiCode option:selected").val();
+        if (type === "ProductSearch") {
+          $(".sk11st-element-productsearch").show();
+        } else if (type === "CategoryInfo") {
+          $(".sk11st-element-categoryinfo").show();
+        } else if (type === "ProductInfo") {
+          $(".sk11st-element-productinfo").show();
+        } else if (type === "ProductImage") {
+          $(".sk11st-element-productimage").show();
+        }
+      });
+      $("#node-input-sk11stApiCode").change();
+    },
+  });
 </script>
 
 <!-- naver shopping API key -->
 <script type="text/html" data-template-name="naverShoppingApiKey">
-    <div class="form-row">
-        <label for="node-input-name"> <i class="fa fa-tag fa-fw"></i> Name</label>
-        <input type="text" id="node-config-input-name" placeholder="Name">
-    </div>
+  <div class="form-row">
+    <label for="node-input-name"> <i class="fa fa-tag fa-fw"></i> Name</label>
+    <input type="text" id="node-config-input-name" placeholder="Name" />
+  </div>
 
-    <div class="form-row">
-        <label for="node-config-input-clientId"> Client Id</label>
-        <input type="text" id="node-config-input-clientId" placeholder="Client Id">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-clientSecret"> Client Secret</label>
-        <input type="text" id="node-config-input-clientSecret" placeholder="Client Secret">
-    </div>
+  <div class="form-row">
+    <label for="node-config-input-clientId"> Client Id</label>
+    <input
+      type="text"
+      id="node-config-input-clientId"
+      placeholder="Client Id"
+    />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-clientSecret"> Client Secret</label>
+    <input
+      type="password"
+      id="node-config-input-clientSecret"
+      placeholder="Client Secret"
+    />
+  </div>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType("naverShoppingApiKey", {
-        category: "config",
-        defaults: {
-            name: { value: "Naver Shopping API Key" },
-        },
-        credentials: {
-            clientId: {},
-            clientSecret: {},
-        },
-        paletteLabel: "Naver Shopping API Key",
-        label: function () {
-            return this.name || 'Naver Shopping API Key';
-        }
-    });
+  RED.nodes.registerType("naverShoppingApiKey", {
+    category: "config",
+    defaults: {
+      name: { value: "Naver Shopping API Key" },
+    },
+    credentials: {
+      clientId: { value: "", required: true },
+      clientSecret: { value: "", required: true },
+    },
+    paletteLabel: "Naver Shopping API Key",
+    label: function () {
+      return this.name || "Naver Shopping API Key";
+    },
+  });
 </script>
 
 <!-- sk11st API key -->
 <script type="text/html" data-template-name="sk11stApiKey">
-    <div class="form-row">
-        <label for="node-config-input-name">
-        <i class="fa fa-tag fa-fw"></i> Name</label>
-        <input type="text" id="node-config-input-name" placeholder="Name" />
-    </div>
-    
-    <div class="form-row">
-        <label for="node-config-input-apikey"> API Key</label>
-        <input type="text" id="node-config-input-apikey" placeholder="API Key" />
-    </div>
+  <div class="form-row">
+    <label for="node-config-input-name">
+      <i class="fa fa-tag fa-fw"></i> Name</label
+    >
+    <input type="text" id="node-config-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-apikey"> API Key</label>
+    <input type="password" id="node-config-input-apikey" placeholder="API Key" />
+  </div>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType("sk11stApiKey", {
-        category: "config",
-        defaults: {
-            name: { value: "sk11st API Key" },
-        },
-        credentials: {
-            apikey: {},
-        },
-        label: function () {
-            return this.name || "sk11st API Key";
-        },
-        oneditsave: function () {
-            var trimField = $("#node-config-input-apikey").val().trim();
-            $("#node-config-input-apikey").val(trimField);
-        },
-    });
+  RED.nodes.registerType("sk11stApiKey", {
+    category: "config",
+    defaults: {
+      name: { value: "sk11st API Key" },
+    },
+    credentials: {
+      apikey: { value: "", required: true },
+    },
+    label: function () {
+      return this.name || "sk11st API Key";
+    },
+    oneditsave: function () {
+      var trimField = $("#node-config-input-apikey").val().trim();
+      $("#node-config-input-apikey").val(trimField);
+    },
+  });
 </script>
