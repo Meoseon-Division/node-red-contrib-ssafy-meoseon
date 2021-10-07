@@ -1,6 +1,8 @@
 module.exports = function (RED) {
 	'use strict';
 	const axios = require('axios');
+	const defaultErrorMessageKOKR = '요청에서 에러를 확인했습니다.'
+	const ALADIN_API_BASE_URL = 'http://www.aladin.co.kr/ttb/api/'
 	function AladinNode(config) {
 		RED.nodes.createNode(this, config);
 
@@ -27,7 +29,7 @@ module.exports = function (RED) {
 			if (config.RequestType === 'ItemSearch') {
 				// console.log('This is:', config.RequestType);
 				axios
-					.get('http://www.aladin.co.kr/ttb/api/ItemSearch.aspx', {
+					.get(ALADIN_API_BASE_URL+'ItemSearch.aspx', {
 						params: node.params,
 					})
 					.then((response) => {
@@ -35,11 +37,11 @@ module.exports = function (RED) {
 						node.send(msg);
 					})
 					.catch((error) => {
-						node.error('요청에서 에러를 확인했습니다.');
+						node.error(defaultErrorMessageKOKR);
 					});
 			} else if (config.RequestType === 'ItemList') {
 				axios
-					.get('http://www.aladin.co.kr/ttb/api/ItemList.aspx', {
+					.get(ALADIN_API_BASE_URL+'ItemList.aspx', {
 						params: node.params,
 					})
 					.then((response) => {
@@ -47,11 +49,11 @@ module.exports = function (RED) {
 						node.send(msg);
 					})
 					.catch((error) => {
-						node.error('요청에서 에러를 확인했습니다.');
+						node.error(defaultErrorMessageKOKR);
 					});
 			} else if (config.RequestType === 'ItemLookUp') {
 				axios
-					.get('http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx', {
+					.get(ALADIN_API_BASE_URL+'ItemLookUp.aspx', {
 						params: node.params,
 					})
 					.then((response) => {
@@ -59,11 +61,11 @@ module.exports = function (RED) {
 						node.send(msg);
 					})
 					.catch((error) => {
-						node.error('요청에서 에러를 확인했습니다.');
+						node.error(defaultErrorMessageKOKR);
 					});
 			} else if (config.RequestType === 'ItemOffStoreList') {
 				axios
-					.get('http://www.aladin.co.kr/ttb/api/ItemOffStoreList.aspx', {
+					.get(ALADIN_API_BASE_URL+'ItemOffStoreList.aspx', {
 						params: node.params,
 					})
 					.then((response) => {
@@ -71,7 +73,7 @@ module.exports = function (RED) {
 						node.send(msg);
 					})
 					.catch((error) => {
-						node.error('요청에서 에러를 확인했습니다.');
+						node.error(defaultErrorMessageKOKR);
 					});
 			} else {
 				if (done) {
