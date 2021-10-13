@@ -24,7 +24,7 @@
     }
   },
   "dependencies": {
-    "axios": "^0.22.0",
+    "axios": "^0.23.0",
     "iconv-lite": "^0.6.3",
     "mustache": "^4.2.0",
     "xml-js": "^1.6.11",
