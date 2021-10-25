@@ -29,6 +29,6 @@
     "mustache": "^4.2.0",
     "xml-js": "^1.6.11",
     "he": "1.2.0",
-    "fast-xml-parser": "3.19.0"
+    "fast-xml-parser": "3.21.0"
   }
 }
