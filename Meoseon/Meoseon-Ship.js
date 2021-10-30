@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-    "use strict";
+    'use strict'
     const axios = require("axios");
     
     function shipping(config) {
